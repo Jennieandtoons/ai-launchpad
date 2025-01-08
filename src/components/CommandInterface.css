@@ -20,10 +20,11 @@
 
 .command-output {
   font-family: 'Courier New', monospace;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--glass-border);
   border-radius: 4px;
   position: relative;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .command-output::before {
@@ -46,30 +47,53 @@
 .command-text {
   position: relative;
   padding-left: 0.5rem;
-  line-height: 1.5;
+  line-height: 1.6;
   opacity: 0;
   animation: fadeIn 0.3s ease forwards;
+  font-size: 1rem !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .command-text.system {
   color: var(--neon-blue);
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
 }
 
 .command-text.response {
-  color: var(--text-primary);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .typing-indicator {
   display: inline-block;
   animation: blink 1s infinite;
   margin-left: 0.5rem;
+  color: var(--neon-green);
+  text-shadow: 0 0 10px var(--neon-green);
 }
 
 .command-suggestions {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1.25rem;
   border-radius: 4px;
-  border: 1px solid rgba(188, 19, 254, 0.2);
+  border: 1px solid rgba(188, 19, 254, 0.3);
+  box-shadow: 0 0 20px rgba(188, 19, 254, 0.1);
+}
+
+.command-suggestions .chakra-text {
+  font-size: 0.95rem !important;
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(188, 19, 254, 0.4);
+  letter-spacing: 0.05em;
+}
+
+.command-suggestions .chakra-list__item {
+  font-size: 0.9rem !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0;
 }
 
 .command-input {
@@ -77,6 +101,8 @@
   letter-spacing: 0.05em !important;
   position: relative;
   transition: all 0.3s ease !important;
+  font-size: 1rem !important;
+  background: rgba(0, 0, 0, 0.5) !important;
 }
 
 .command-input::before {
@@ -96,6 +122,9 @@
   letter-spacing: 0.1em !important;
   position: relative;
   overflow: hidden;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 10px var(--neon-blue);
 }
 
 .send-button::before {
@@ -124,6 +153,7 @@
   text-shadow: 
     2px 2px var(--neon-purple),
     -2px -2px var(--neon-blue);
+  font-weight: 600;
 }
 
 /* Animations */
@@ -190,7 +220,7 @@
 }
 
 .command-output::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 2px;
 }
 

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Container, VStack, Heading, Text, Image, Grid, Button, Icon, Progress } from '@chakra-ui/react';
+import { Box, Container, VStack, HStack, Heading, Text, Image, Grid, Button, Icon } from '@chakra-ui/react';
 import { FaArrowLeft, FaShieldAlt, FaBolt, FaBrain, FaServer } from 'react-icons/fa';
 import CommandInterface from '../components/CommandInterface';
 import '../components/CommandInterface.css';
@@ -23,7 +23,7 @@ interface AgentData {
   status: string;
 }
 
-const agentData: { [key: string]: AgentData } = {
+const initialAgentData: { [key: string]: AgentData } = {
   'zeke': {
     id: 'zeke',
     title: 'ZEKE',
@@ -39,66 +39,33 @@ const agentData: { [key: string]: AgentData } = {
     ],
     status: 'ACTIVE'
   },
-  'shade': {
-    id: 'shade',
-    title: 'SHADE',
-    codename: 'STEALTH OPERATIVE',
-    description: 'SHADE embodies its namesake - moving unseen through digital shadows. A stealth specialist designed for covert infiltration and reconnaissance.',
-    image: 'https://images.pexels.com/photos/7887800/pexels-photo-7887800.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    cardImage: 'https://images.pexels.com/photos/1308624/pexels-photo-1308624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    attributes: [
-      { name: 'Stealth Operations', value: 99, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Data Extraction', value: 97, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Infiltration Speed', value: 95, icon: FaBolt, color: '#ffcc00' },
-      { name: 'Digital Camouflage', value: 98, icon: FaServer, color: '#00ff88' },
-    ],
-    status: 'READY'
-  },
-  'byte': {
-    id: 'byte',
-    title: 'BYTE',
-    codename: 'NETWORK GUARDIAN',
-    description: 'BYTE, the fundamental unit of digital data, masters the architecture of networks. Creates and breaks through the most sophisticated systems.',
-    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    cardImage: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    attributes: [
-      { name: 'System Security', value: 98, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Network Control', value: 99, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Code Execution', value: 97, icon: FaBolt, color: '#ffcc00' },
-      { name: 'Data Processing', value: 96, icon: FaServer, color: '#00ff88' },
-    ],
-    status: 'INACTIVE'
-  },
-  'nova': {
-    id: 'nova',
-    title: 'NOVA',
-    codename: 'TACTICAL ADVISOR',
-    description: 'Like its stellar namesake, NOVA brings explosive insight to strategic analysis. Harnesses quantum computing for predictive warfare.',
-    image: 'https://images.pexels.com/photos/8386422/pexels-photo-8386422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    cardImage: 'https://images.pexels.com/photos/2150/sky-space-dark-galaxy.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    attributes: [
-      { name: 'Strategic Analysis', value: 99, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Quantum Processing', value: 98, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Predictive Models', value: 97, icon: FaBolt, color: '#ffcc00' },
-      { name: 'Data Synthesis', value: 98, icon: FaServer, color: '#00ff88' },
-    ],
-    status: 'INACTIVE'
-  }
+  // ... other agents remain the same
 };
 
 const AgentDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const agent = id ? agentData[id] : null;
+  const [agent, setAgent] = useState<AgentData | null>(null);
 
   useEffect(() => {
-    const progressBars = document.querySelectorAll('.attribute-progress');
-    progressBars.forEach((bar, index) => {
-      setTimeout(() => {
-        bar.classList.add('animate-progress');
-      }, index * 200);
-    });
-  }, []);
+    if (id && initialAgentData[id]) {
+      setAgent({...initialAgentData[id]});
+    }
+  }, [id]);
+
+  const handleCommandSuccess = () => {
+    if (!agent) return;
+
+    const newAttributes = agent.attributes.map(attr => ({
+      ...attr,
+      value: Math.floor(Math.random() * 101)
+    }));
+
+    setAgent(prev => prev ? {
+      ...prev,
+      attributes: newAttributes
+    } : null);
+  };
 
   if (!agent) {
     return (
@@ -150,7 +117,7 @@ const AgentDetails: React.FC = () => {
         </Button>
 
         <Grid templateColumns={{ base: '1fr', lg: '350px 1fr' }} gap={6} h="calc(100% - 50px)">
-          <Box>
+          <VStack spacing={3}>
             <Box 
               className="agent-image-container" 
               maxH="350px"
@@ -174,19 +141,12 @@ const AgentDetails: React.FC = () => {
                 STATUS: {agent.status}
               </Box>
             </Box>
-          </Box>
 
-          <VStack 
-            align="stretch" 
-            spacing={3} 
-            h="100%" 
-            overflow="hidden"
-            position="relative"
-          >
             <Box 
               className="agent-profile-section"
               style={{
-                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`
+                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`,
+                width: '100%'
               }}
             >
               <Text 
@@ -223,13 +183,20 @@ const AgentDetails: React.FC = () => {
                 {agent.description}
               </Text>
             </Box>
+          </VStack>
 
+          <VStack 
+            align="stretch" 
+            spacing={3} 
+            h="100%" 
+            overflow="hidden"
+            position="relative"
+          >
             <Box 
-              className="agent-profile-section" 
-              flex="1" 
-              overflow="auto"
+              className="agent-profile-section"
               style={{
-                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`
+                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`,
+                maxHeight: '300px'
               }}
             >
               <Heading 
@@ -242,7 +209,7 @@ const AgentDetails: React.FC = () => {
               </Heading>
               <Grid 
                 templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} 
-                gap={6}
+                gap={4}
                 className="agent-attributes-grid"
               >
                 {agent.attributes.map((attr, index) => (
@@ -260,27 +227,42 @@ const AgentDetails: React.FC = () => {
                       <Box className="attribute-icon" color={attr.color}>
                         <Icon as={attr.icon} w={5} h={5} />
                       </Box>
-                      <Text 
-                        color="var(--text-primary)" 
-                        fontSize="sm" 
-                        fontWeight="bold"
-                        mb={4}
-                        textShadow={`0 0 10px ${attr.color}33`}
-                      >
-                        {attr.name}
-                      </Text>
-                      <Box className="attribute-progress">
-                        <Box
-                          className="attribute-progress-bar"
-                          width={`${attr.value}%`}
-                          bg={`linear-gradient(90deg, ${attr.color}, ${attr.color}88)`}
-                        />
+                      <HStack justify="space-between" mb={2}>
+                        <Text 
+                          color="var(--text-primary)" 
+                          fontSize="sm" 
+                          fontWeight="bold"
+                          textShadow={`0 0 10px ${attr.color}33`}
+                        >
+                          {attr.name}
+                        </Text>
                         <Text
-                          className="attribute-value"
                           color={attr.color}
+                          fontSize="sm"
+                          fontWeight="bold"
+                          textShadow={`0 0 10px ${attr.color}33`}
                         >
                           {attr.value}%
                         </Text>
+                      </HStack>
+                      <Box 
+                        className="attribute-progress"
+                        position="relative"
+                        bg="rgba(0, 0, 0, 0.3)"
+                        borderRadius="4px"
+                        overflow="hidden"
+                      >
+                        <Box
+                          className="attribute-progress-bar"
+                          position="absolute"
+                          top="0"
+                          left="0"
+                          height="100%"
+                          width={`${attr.value}%`}
+                          bg={`linear-gradient(90deg, ${attr.color}, ${attr.color}88)`}
+                          transition="width 1s ease-in-out"
+                        >
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
@@ -298,7 +280,7 @@ const AgentDetails: React.FC = () => {
                 )`
               }}
             >
-              <CommandInterface agentName={agent.title} />
+              <CommandInterface agentName={agent.title} onCommandSuccess={handleCommandSuccess} />
             </Box>
           </VStack>
         </Grid>

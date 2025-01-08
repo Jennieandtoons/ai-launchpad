@@ -1,17 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Input, Button, Text, VStack, HStack, List, ListItem } from '@chakra-ui/react';
 
+type ResponseType = 'system' | 'response';
+
 interface CommandResponse {
-  type: 'system' | 'response';
+  type: ResponseType;
   content: string;
   timestamp: string;
 }
 
 interface CommandInterfaceProps {
   agentName: string;
+  onCommandSuccess?: () => void;
 }
 
-const SUGGESTED_COMMANDS = [
+interface SuggestedCommand {
+  cmd: string;
+  desc: string;
+}
+
+interface CommandResponseMap {
+  [key: string]: string[];
+}
+
+const SUGGESTED_COMMANDS: SuggestedCommand[] = [
   { cmd: 'STATUS REPORT', desc: 'Get current status' },
   { cmd: 'TACTICAL BRIEF', desc: 'Learn about the current mission' },
   { cmd: 'DIAGNOSTIC RUN', desc: 'Check systems' },
@@ -20,25 +32,36 @@ const SUGGESTED_COMMANDS = [
   { cmd: 'STANDBY MODE', desc: 'Place in standby mode' },
 ];
 
-const COMMAND_RESPONSES: { [key: string]: string[] } = {
+const COMMAND_RESPONSES: CommandResponseMap = {
   'STATUS REPORT': [
-    '[ZEKE SYSTEM LOG: ACTIVE]',
-    '- Core Power: 100%',
-    '- Tactical Systems: ONLINE',
-    '- Mission Status: READY',
-    '- Combat Readiness: OPTIMAL'
+    '[ZEKE STATUS REPORT]',
+    '- Core Systems: OPERATIONAL',
+    '- Combat Readiness: 98%',
+    '- Mission Status: ACTIVE',
+    '- Current Objective: Secure Grid-Delta-7',
+    '- Threat Assessment: HIGH',
+    '- Tactical Systems: FULLY OPERATIONAL',
+    '- Neural Network: OPTIMAL',
+    '[END REPORT]'
   ],
   'TACTICAL BRIEF': [
-    '[MISSION BRIEFING LOADED]',
-    'Current Objective: Secure Grid-Delta-7',
+    '[TACTICAL ANALYSIS]',
+    'Current Mission: Secure Grid-Delta-7',
     'Threat Level: HIGH',
-    'Suggested Tactics: Rapid infiltration and suppressive strikes'
+    'Enemy Activity: Detected in sectors A3, B7',
+    'Recommended Action: Rapid infiltration with defensive positioning',
+    'Strategic Assets: 3 key points identified',
+    'Support Systems: Ready for deployment',
+    '[END BRIEF]'
   ],
   'DIAGNOSTIC RUN': [
-    '[RUNNING DIAGNOSTIC...]',
-    '- Power Levels: Stable',
-    '- Motor Functions: Optimal',
-    '- Neural Systems: Operational',
+    '[DIAGNOSTIC SCAN INITIATED]',
+    '- Core Processing: 100% efficiency',
+    '- Combat Protocols: Active',
+    '- Tactical Database: Synchronized',
+    '- Response Systems: Optimal',
+    '- Neural Network: Stable',
+    '- Battlefield Analysis: Active',
     '[ALL SYSTEMS NOMINAL]'
   ],
   'ENGAGE SIMULATION': [
@@ -46,27 +69,44 @@ const COMMAND_RESPONSES: { [key: string]: string[] } = {
     'Loading Virtual Environment...',
     'Calibrating Response Systems...',
     'Combat Parameters Set',
+    'Initializing Combat Scenario Delta-7',
+    'Enemy Forces: Detected',
+    'Tactical Options: Generated',
     '[SIMULATION READY]'
   ],
   'UPLOAD DATA': [
     '[DATA UPLOAD INTERFACE ACTIVE]',
     'Awaiting Mission Parameters...',
     'Secure Channel: ESTABLISHED',
-    'Ready for Data Transfer'
+    'Encryption Protocol: ACTIVE',
+    'Data Buffers: CLEAR',
+    'Ready for Data Transfer',
+    '[AWAITING INPUT]'
   ],
   'STANDBY MODE': [
     '[INITIATING STANDBY SEQUENCE]',
     'Reducing Power Output...',
     'Maintaining Core Functions...',
     'Alert Systems: ACTIVE',
+    'Passive Scanning: ENABLED',
+    'Emergency Protocols: READY',
     '[STANDBY MODE ENGAGED]'
   ]
 };
 
-const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
-  const [command, setCommand] = useState('');
+// Generic responses for unrecognized commands
+const GENERIC_RESPONSES = [
+  '[ZEKE RESPONSE] Command acknowledged. Analyzing tactical implications...',
+  '[ZEKE RESPONSE] Processing request. Standby for tactical assessment...',
+  '[ZEKE RESPONSE] Input received. Calculating optimal response...',
+  '[ZEKE RESPONSE] Command registered. Evaluating strategic options...',
+  '[ZEKE RESPONSE] Signal received. Analyzing battlefield relevance...'
+];
+
+const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onCommandSuccess }) => {
+  const [command, setCommand] = useState<string>('');
   const [responses, setResponses] = useState<CommandResponse[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
   const responseEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,12 +114,17 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
     setResponses([
       {
         type: 'system',
-        content: 'COMMAND INTERFACE ONLINE',
+        content: '[ZEKE AI] COMMAND INTERFACE ONLINE',
         timestamp: getTimestamp()
       },
       {
         type: 'system',
-        content: 'Awaiting Operator Input...',
+        content: '[ZEKE AI] Combat Systems: ACTIVE',
+        timestamp: getTimestamp()
+      },
+      {
+        type: 'system',
+        content: '[ZEKE AI] Awaiting Tactical Input...',
         timestamp: getTimestamp()
       }
     ]);
@@ -89,11 +134,11 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
     scrollToBottom();
   }, [responses]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (): void => {
     responseEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const getTimestamp = () => {
+  const getTimestamp = (): string => {
     return new Date().toLocaleTimeString('en-US', { 
       hour12: false,
       hour: '2-digit',
@@ -102,7 +147,15 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
     });
   };
 
-  const handleCommand = async () => {
+  const getResponse = (cmd: string): string[] => {
+    const normalizedCmd = cmd.toUpperCase();
+    if (normalizedCmd in COMMAND_RESPONSES) {
+      return COMMAND_RESPONSES[normalizedCmd];
+    }
+    return [GENERIC_RESPONSES[Math.floor(Math.random() * GENERIC_RESPONSES.length)]];
+  };
+
+  const handleCommand = async (): Promise<void> => {
     if (!command.trim()) return;
 
     const normalizedCommand = command.toUpperCase().trim();
@@ -110,61 +163,37 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
     setIsTyping(true);
 
     // Add user command to responses
-    setResponses(prev => [...prev, {
+    setResponses((prev: CommandResponse[]) => [...prev, {
       type: 'system',
       content: `> ${normalizedCommand}`,
       timestamp: getTimestamp()
     }]);
 
-    try {
-      try {
-        // First try the special command handlers
-        console.log('Sending command to API:', normalizedCommand);
-        const response = await fetch('http://localhost:3001/api/command', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ command: normalizedCommand })
-        });
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-        console.log('API Response status:', response.status);
-        const data = await response.json();
-        console.log('API Response data:', data);
+    // Get response lines
+    const responseLines = getResponse(normalizedCommand);
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to process command');
-        }
-
-        const lines = data.response.split('\n');
-        console.log('Processing response lines:', lines);
-
-        // Add response line by line with delays
-        for (const line of lines) {
-          if (line.trim()) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-            setResponses(prev => [...prev, {
-              type: 'response',
-              content: line,
-              timestamp: getTimestamp()
-            }]);
-          }
-        }
-      } catch (error) {
-        console.error('API Error:', error);
-        throw error;
-      }
-    } catch (error) {
-      console.error('Error processing command:', error);
-      setResponses(prev => [...prev, {
+    // Add response line by line with delays
+    for (const line of responseLines) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setResponses((prev: CommandResponse[]) => [...prev, {
         type: 'response',
-        content: '[SYSTEM ERROR] Communication with ZEKE AI system failed. Please try again.',
+        content: line,
         timestamp: getTimestamp()
       }]);
+    }
+
+    // If it's a recognized command, trigger the success callback
+    if (normalizedCommand in COMMAND_RESPONSES) {
+      onCommandSuccess?.();
     }
 
     setIsTyping(false);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       handleCommand();
     }
@@ -173,14 +202,16 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
   return (
     <Box className="command-interface">
       <Box className="command-output" mb={4} p={4} height="300px" overflowY="auto">
-        {responses.map((response, index) => (
+        {responses.map((response: CommandResponse, index: number) => (
           <Text
             key={index}
             className={`command-text ${response.type}`}
             color={response.type === 'system' ? 'var(--neon-blue)' : 'var(--text-primary)'}
-            fontSize="sm"
-            mb={1}
-            fontFamily="monospace"
+            fontSize="md"
+            mb={2}
+            fontFamily="'Share Tech Mono', monospace"
+            fontWeight="500"
+            letterSpacing="0.05em"
           >
             <Text as="span" color="var(--text-secondary)" fontSize="xs">
               [{response.timestamp}]
@@ -201,7 +232,7 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
           Suggested Commands:
         </Text>
         <List spacing={1}>
-          {SUGGESTED_COMMANDS.map((cmd, index) => (
+          {SUGGESTED_COMMANDS.map((cmd: SuggestedCommand, index: number) => (
             <ListItem 
               key={index}
               fontSize="xs"
@@ -220,7 +251,7 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
         <Input
           placeholder="Enter Command..."
           value={command}
-          onChange={(e) => setCommand(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCommand(e.target.value)}
           onKeyPress={handleKeyPress}
           bg="rgba(0, 0, 0, 0.3)"
           border="1px solid var(--glass-border)"
@@ -233,7 +264,7 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName }) => {
           className="command-input"
         />
         <Button
-          onClick={handleCommand}
+          onClick={() => handleCommand()}
           bg="transparent"
           border="1px solid var(--neon-blue)"
           color="var(--neon-blue)"
