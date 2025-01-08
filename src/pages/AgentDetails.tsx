@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Container, VStack, Heading, Text, Image, Grid, Button, Icon, Progress } from '@chakra-ui/react';
 import { FaArrowLeft, FaShieldAlt, FaBolt, FaBrain, FaServer } from 'react-icons/fa';
-import ChatInterface from '../components/ChatInterface';
+import CommandInterface from '../components/CommandInterface';
+import '../components/CommandInterface.css';
 
 interface AgentAttribute {
   name: string;
@@ -17,66 +18,71 @@ interface AgentData {
   codename: string;
   description: string;
   image: string;
+  cardImage: string;
   attributes: AgentAttribute[];
   status: string;
 }
 
 const agentData: { [key: string]: AgentData } = {
-  'nexus-7': {
-    id: 'nexus-7',
-    title: 'NEXUS-7',
-    codename: 'SENTINEL PRIME',
-    description: 'Advanced combat-class autonomous agent. Specializes in high-priority mission execution and strategic operations.',
+  'zeke': {
+    id: 'zeke',
+    title: 'ZEKE',
+    codename: 'COMBAT SPECIALIST',
+    description: 'Named after ancient warrior strength, ZEKE leads with unparalleled tactical precision. A combat-class unit built for high-stakes missions. Drawing from the legacy of legendary warriors, ZEKE embodies the perfect fusion of ancient combat wisdom and cutting-edge technology.',
     image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    cardImage: 'https://images.pexels.com/photos/2387793/pexels-photo-2387793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     attributes: [
-      { name: 'Combat Efficiency', value: 95, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Processing Power', value: 85, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Response Time', value: 90, icon: FaBolt, color: '#ffcc00' },
-      { name: 'System Integration', value: 88, icon: FaServer, color: '#00ff88' },
-    ],
-    status: 'STANDBY'
-  },
-  'ghost-x': {
-    id: 'ghost-x',
-    title: 'GHOST-X',
-    codename: 'PHANTOM OPS',
-    description: 'Stealth-optimized infiltration unit. Masters of data extraction and digital reconnaissance.',
-    image: 'https://images.pexels.com/photos/7887800/pexels-photo-7887800.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    attributes: [
-      { name: 'Stealth Rating', value: 98, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Data Processing', value: 92, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Infiltration Speed', value: 85, icon: FaBolt, color: '#ffcc00' },
-      { name: 'System Integration', value: 90, icon: FaServer, color: '#00ff88' },
-    ],
-    status: 'READY'
-  },
-  'cipher-v': {
-    id: 'cipher-v',
-    title: 'CIPHER-V',
-    codename: 'MATRIX WEAVER',
-    description: 'Neural network architect. Crafts digital realities through advanced code manipulation.',
-    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    attributes: [
-      { name: 'Code Generation', value: 96, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Neural Processing', value: 94, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Execution Speed', value: 88, icon: FaBolt, color: '#ffcc00' },
-      { name: 'System Integration', value: 92, icon: FaServer, color: '#00ff88' },
+      { name: 'Combat Mastery', value: 98, icon: FaShieldAlt, color: '#00f3ff' },
+      { name: 'Tactical Analysis', value: 95, icon: FaBrain, color: '#bc13fe' },
+      { name: 'Response Time', value: 97, icon: FaBolt, color: '#ffcc00' },
+      { name: 'Battlefield Control', value: 96, icon: FaServer, color: '#00ff88' },
     ],
     status: 'ACTIVE'
   },
-  'omega-ai': {
-    id: 'omega-ai',
-    title: 'OMEGA-AI',
-    codename: 'MIND FORGE',
-    description: 'Quantum-enhanced strategic analysis unit. Predicts and shapes the future through data.',
+  'shade': {
+    id: 'shade',
+    title: 'SHADE',
+    codename: 'STEALTH OPERATIVE',
+    description: 'SHADE embodies its namesake - moving unseen through digital shadows. A stealth specialist designed for covert infiltration and reconnaissance.',
+    image: 'https://images.pexels.com/photos/7887800/pexels-photo-7887800.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    cardImage: 'https://images.pexels.com/photos/1308624/pexels-photo-1308624.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    attributes: [
+      { name: 'Stealth Operations', value: 99, icon: FaShieldAlt, color: '#00f3ff' },
+      { name: 'Data Extraction', value: 97, icon: FaBrain, color: '#bc13fe' },
+      { name: 'Infiltration Speed', value: 95, icon: FaBolt, color: '#ffcc00' },
+      { name: 'Digital Camouflage', value: 98, icon: FaServer, color: '#00ff88' },
+    ],
+    status: 'READY'
+  },
+  'byte': {
+    id: 'byte',
+    title: 'BYTE',
+    codename: 'NETWORK GUARDIAN',
+    description: 'BYTE, the fundamental unit of digital data, masters the architecture of networks. Creates and breaks through the most sophisticated systems.',
+    image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    cardImage: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    attributes: [
+      { name: 'System Security', value: 98, icon: FaShieldAlt, color: '#00f3ff' },
+      { name: 'Network Control', value: 99, icon: FaBrain, color: '#bc13fe' },
+      { name: 'Code Execution', value: 97, icon: FaBolt, color: '#ffcc00' },
+      { name: 'Data Processing', value: 96, icon: FaServer, color: '#00ff88' },
+    ],
+    status: 'INACTIVE'
+  },
+  'nova': {
+    id: 'nova',
+    title: 'NOVA',
+    codename: 'TACTICAL ADVISOR',
+    description: 'Like its stellar namesake, NOVA brings explosive insight to strategic analysis. Harnesses quantum computing for predictive warfare.',
     image: 'https://images.pexels.com/photos/8386422/pexels-photo-8386422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    cardImage: 'https://images.pexels.com/photos/2150/sky-space-dark-galaxy.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     attributes: [
       { name: 'Strategic Analysis', value: 99, icon: FaShieldAlt, color: '#00f3ff' },
-      { name: 'Quantum Processing', value: 95, icon: FaBrain, color: '#bc13fe' },
-      { name: 'Prediction Accuracy', value: 93, icon: FaBolt, color: '#ffcc00' },
-      { name: 'System Integration', value: 94, icon: FaServer, color: '#00ff88' },
+      { name: 'Quantum Processing', value: 98, icon: FaBrain, color: '#bc13fe' },
+      { name: 'Predictive Models', value: 97, icon: FaBolt, color: '#ffcc00' },
+      { name: 'Data Synthesis', value: 98, icon: FaServer, color: '#00ff88' },
     ],
-    status: 'STANDBY'
+    status: 'INACTIVE'
   }
 };
 
@@ -117,22 +123,43 @@ const AgentDetails: React.FC = () => {
   `)}`;
 
   return (
-    <Box bg="var(--cyber-darker)" minH="100vh" py={10}>
-      <Container maxW="container.xl">
+    <Box bg="var(--cyber-darker)" h="100vh" className="agent-details-container" position="relative">
+      <Box
+        position="absolute"
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        width="100%"
+        height="100%"
+        opacity={0.1}
+        style={{
+          background: `radial-gradient(circle at center, ${agent.status === 'ACTIVE' ? 'var(--neon-green)' : 
+                                                        agent.status === 'READY' ? 'var(--neon-blue)' : 
+                                                        'var(--neon-red)'} 0%, transparent 70%)`
+        }}
+        pointerEvents="none"
+      />
+      <Container maxW="container.xl" position="relative" h="100%" py={3}>
         <Button
           leftIcon={<FaArrowLeft />}
           onClick={() => navigate('/')}
-          mb={8}
-          className="cyber-button back-button"
-          color="var(--text-primary)"
-          borderColor="var(--neon-blue)"
+          mb={4}
+          className="back-button"
         >
           RETURN TO HUB
         </Button>
 
-        <Grid templateColumns={{ base: '1fr', lg: '400px 1fr' }} gap={10}>
+        <Grid templateColumns={{ base: '1fr', lg: '350px 1fr' }} gap={6} h="calc(100% - 50px)">
           <Box>
-            <Box className="agent-image-container">
+            <Box 
+              className="agent-image-container" 
+              maxH="350px"
+              style={{
+                boxShadow: `0 0 30px ${agent.status === 'ACTIVE' ? 'rgba(0, 255, 136, 0.1)' : 
+                                     agent.status === 'READY' ? 'rgba(0, 243, 255, 0.1)' : 
+                                     'rgba(255, 0, 85, 0.1)'}`
+              }}
+            >
               <Image
                 src={agent.image}
                 alt={agent.title}
@@ -143,96 +170,135 @@ const AgentDetails: React.FC = () => {
                 height="400px"
                 objectFit="cover"
               />
-              <Box
-                position="absolute"
-                bottom={0}
-                left={0}
-                right={0}
-                p={4}
-                bg="rgba(0,0,0,0.8)"
-                borderTop="1px solid var(--neon-blue)"
-              >
-                <Text className="status-text" fontSize="sm" textAlign="center">
-                  STATUS: {agent.status}
-                </Text>
+              <Box className={`status-indicator ${agent.status.toLowerCase()}`}>
+                STATUS: {agent.status}
               </Box>
             </Box>
           </Box>
 
-          <VStack align="stretch" spacing={8}>
-            <Box>
+          <VStack 
+            align="stretch" 
+            spacing={3} 
+            h="100%" 
+            overflow="hidden"
+            position="relative"
+          >
+            <Box 
+              className="agent-profile-section"
+              style={{
+                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`
+              }}
+            >
               <Text 
                 className="subtitle-text" 
-                fontSize="sm"
+                fontSize="xs"
                 letterSpacing="0.5em"
-                mb={2}
+                mb={1}
+                textShadow="0 0 10px rgba(0, 243, 255, 0.3)"
               >
                 AGENT PROFILE
               </Text>
-              <Heading className="title-text" size="2xl" mb={4}>
+              <Heading 
+                className="title-text" 
+                size="xl" 
+                mb={2}
+                textShadow="0 0 20px rgba(0, 243, 255, 0.4)"
+              >
                 {agent.title}
               </Heading>
-              <Text className="codename" fontSize="xl" mb={6}>
+              <Text 
+                className="codename" 
+                fontSize="lg" 
+                mb={3}
+                textShadow="0 0 15px rgba(188, 19, 254, 0.4)"
+              >
                 [{agent.codename}]
               </Text>
-              <Text className="description" fontSize="lg" mb={8}>
+              <Text 
+                className="description" 
+                fontSize="md" 
+                mb={4}
+                lineHeight="1.6"
+              >
                 {agent.description}
               </Text>
             </Box>
 
-            <Box>
-              <Heading className="title-text" size="md" mb={6}>
+            <Box 
+              className="agent-profile-section" 
+              flex="1" 
+              overflow="auto"
+              style={{
+                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`
+              }}
+            >
+              <Heading 
+                className="title-text" 
+                size="sm" 
+                mb={4}
+                textShadow="0 0 15px rgba(0, 243, 255, 0.4)"
+              >
                 AGENT ATTRIBUTES
               </Heading>
-              <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={6}>
+              <Grid 
+                templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} 
+                gap={6}
+                className="agent-attributes-grid"
+              >
                 {agent.attributes.map((attr, index) => (
                   <Box
                     key={index}
-                    className="cyber-card"
-                    p={6}
-                    position="relative"
-                    overflow="hidden"
+                    className="attribute-card"
+                    borderColor={attr.color}
+                    sx={{
+                      '&::before': {
+                        backgroundImage: `url(${agent.cardImage})`
+                      }
+                    }}
                   >
-                    <VStack spacing={4} align="stretch">
-                      <Box display="flex" alignItems="center" gap={3}>
-                        <Icon as={attr.icon} w={6} h={6} color={attr.color} />
-                        <Text color="var(--text-primary)" fontSize="sm" fontWeight="bold">
-                          {attr.name}
-                        </Text>
+                    <Box className="attribute-content">
+                      <Box className="attribute-icon" color={attr.color}>
+                        <Icon as={attr.icon} w={5} h={5} />
                       </Box>
-                      <Box position="relative">
-                        <Progress
-                          value={attr.value}
-                          className="attribute-progress"
-                          height="12px"
-                          borderRadius="full"
-                          bg="rgba(255,255,255,0.1)"
-                          sx={{
-                            '& > div': {
-                              background: `linear-gradient(90deg, ${attr.color}, ${attr.color}88)`,
-                              transition: 'width 1s ease-in-out',
-                            }
-                          }}
+                      <Text 
+                        color="var(--text-primary)" 
+                        fontSize="sm" 
+                        fontWeight="bold"
+                        mb={4}
+                        textShadow={`0 0 10px ${attr.color}33`}
+                      >
+                        {attr.name}
+                      </Text>
+                      <Box className="attribute-progress">
+                        <Box
+                          className="attribute-progress-bar"
+                          width={`${attr.value}%`}
+                          bg={`linear-gradient(90deg, ${attr.color}, ${attr.color}88)`}
                         />
                         <Text
-                          position="absolute"
-                          right="0"
-                          top="-25px"
-                          className="neon-text"
-                          fontSize="xl"
-                          fontWeight="bold"
+                          className="attribute-value"
+                          color={attr.color}
                         >
                           {attr.value}%
                         </Text>
                       </Box>
-                    </VStack>
+                    </Box>
                   </Box>
                 ))}
               </Grid>
             </Box>
 
-            <Box>
-              <ChatInterface agentName={agent.title} agentCodename={agent.codename} />
+            <Box 
+              className="command-interface-container"
+              style={{
+                borderImage: `linear-gradient(to bottom, var(--neon-blue), transparent) 1`,
+                background: `linear-gradient(to bottom, 
+                  rgba(0, 0, 0, 0.3),
+                  rgba(0, 0, 0, 0.2)
+                )`
+              }}
+            >
+              <CommandInterface agentName={agent.title} />
             </Box>
           </VStack>
         </Grid>

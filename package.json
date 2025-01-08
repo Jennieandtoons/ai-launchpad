@@ -6,22 +6,37 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "cross-env NODE_ENV=development tsx watch src/server/zekeAI.ts",
+    "dev:all": "concurrently \"npm run dev\" \"npm run server\""
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^22.10.5",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "framer-motion": "^10.17.9",
+    "js-cookie": "^3.0.5",
+    "openai": "^4.77.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
-    "react-router-dom": "^7.1.1"
+    "react-router-dom": "^7.1.1",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.19.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }
