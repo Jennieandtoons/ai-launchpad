@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 :root {
-  --neon-blue: #00f3ff;
+  --neon-blue: #4299E1;
   --neon-purple: #bc13fe;
   --cyber-dark: #0a0a1f;
   --cyber-darker: #050511;
@@ -95,7 +95,7 @@ body::before {
 }
 
 .user-message {
-  background: rgba(0, 243, 255, 0.15);
+  background: rgba(66, 153, 225, 0.15);
   margin-left: auto;
   border: 2px solid var(--neon-blue);
   color: #ffffff;
@@ -130,7 +130,7 @@ body::before {
 }
 
 .cyber-button {
-  background: rgba(0, 243, 255, 0.15) !important;
+  background: rgba(66, 153, 225, 0.15) !important;
   border: 2px solid var(--neon-blue) !important;
   color: var(--text-primary) !important;
   font-family: 'Orbitron', sans-serif !important;
@@ -142,7 +142,7 @@ body::before {
 }
 
 .cyber-button:hover {
-  background: rgba(0, 243, 255, 0.25) !important;
+  background: rgba(66, 153, 225, 0.25) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -152,7 +152,7 @@ body::before {
   font-weight: bold !important;
   letter-spacing: 0.2em !important;
   font-size: 1rem !important;
-  background: rgba(0, 243, 255, 0.1);
+  background: rgba(66, 153, 225, 0.1);
   padding: 4px 12px;
   border-radius: 4px;
 }
@@ -196,7 +196,7 @@ body::before {
 .profile-header {
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+  border-bottom: 2px solid rgba(66, 153, 225, 0.3);
 }
 
 .attribute-name {
