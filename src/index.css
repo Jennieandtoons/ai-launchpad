@@ -48,12 +48,21 @@ body::before {
 }
 
 .subtitle-text {
-  color: #63B3ED !important; /* Chakra UI's blue.300 - brighter and more readable */
+  color: var(--text-secondary) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.2em !important;
+  font-size: 1.2rem !important;
+}
+
+.codename {
+  color: #FFFFFF !important;
   font-weight: 600 !important;
-  letter-spacing: 0.1em !important;
-  font-size: 1.1rem !important;
-  line-height: 1.4 !important;
-  text-shadow: 0 0 1px rgba(99, 179, 237, 0.3) !important;
+  letter-spacing: 0.15em !important;
+  font-size: 1rem !important;
+  font-family: 'Share Tech Mono', monospace !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
 }
 
 .description {
