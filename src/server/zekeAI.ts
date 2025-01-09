@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, Router } from 'express';
+import express, { Request, Response, NextFunction, Router, Application, RequestHandler } from 'express';
 import cors from 'cors';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
@@ -20,8 +20,8 @@ if (!process.env.OPENAI_API_KEY) {
   process.exit(1);
 }
 
-const app = express();
-const router = Router();
+const app: Application = express();
+const router: Router = express.Router();
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -118,11 +118,17 @@ router.get('/health', (_req: Request, res: Response) => {
   });
 });
 
+interface CommandRequest extends Request {
+  body: {
+    command: string;
+  };
+}
+
 // AI query endpoint
-router.post('/query', async (req: Request<{}, {}, { command: string }>, res: Response) => {
+const handleQuery: RequestHandler = async (req, res, next): Promise<void> => {
   try {
-    console.log('[ZEKE AI] Processing query command:', req.body.command);
-    const { command } = req.body;
+    const { command } = req.body as { command: string };
+    console.log('[ZEKE AI] Processing query command:', command);
 
     // Generate system message based on command type
     let systemMessage = ZEKE_CONTEXT;
@@ -149,34 +155,30 @@ router.post('/query', async (req: Request<{}, {}, { command: string }>, res: Res
     res.json({ response });
 
   } catch (error) {
-    console.error('[ZEKE AI ERROR] Error processing query command:', error);
-    res.status(500).json({ 
-      error: 'Internal system error',
-      response: '[ZEKE SYSTEM ERROR] Unable to process command. Systems may be compromised.'
-    });
+    next(error);
   }
-});
+};
 
 // Command endpoint
-router.post('/command', async (req: Request<{}, {}, { command: string }>, res: Response) => {
+const handleCommand: RequestHandler = async (req, res, next): Promise<void> => {
   try {
-    console.log('[ZEKE AI] Processing special command:', req.body.command);
+    const { command } = req.body as { command: string };
+    console.log('[ZEKE AI] Processing special command:', command);
     
-    if (!req.body || !req.body.command) {
-      console.error('[ZEKE AI ERROR] Invalid request body - missing command');
-      return res.status(400).json({
+    if (!command) {
+      res.status(400).json({
         error: 'Invalid request',
         response: '[ZEKE SYSTEM ERROR] Command format invalid. Please provide a valid command.'
       });
+      return;
     }
-
-    const { command } = req.body;
 
     // Check for special commands first
     if (command in SPECIAL_COMMANDS) {
       const response = SPECIAL_COMMANDS[command as keyof typeof SPECIAL_COMMANDS];
       console.log('[ZEKE AI] Special command response:', response);
-      return res.json({ response });
+      res.json({ response });
+      return;
     }
 
     // If not a special command, use OpenAI
@@ -196,14 +198,12 @@ router.post('/command', async (req: Request<{}, {}, { command: string }>, res: R
     res.json({ response });
 
   } catch (error) {
-    console.error('[ZEKE AI ERROR] Error processing special command:', error);
-    console.error('[ZEKE AI ERROR] Stack trace:', (error as Error).stack);
-    res.status(500).json({
-      error: 'Internal system error',
-      response: '[ZEKE SYSTEM ERROR] Unable to process command. Systems may be compromised.'
-    });
+    next(error);
   }
-});
+};
+
+router.post('/query', handleQuery);
+router.post('/command', handleCommand);
 
 // Mount API routes
 app.use('/api', router);
