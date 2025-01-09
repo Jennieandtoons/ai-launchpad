@@ -224,21 +224,21 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
           <Text
             key={index}
             className={`command-text ${response.type}`}
-            color={response.type === 'system' ? 'var(--neon-blue)' : 'var(--text-primary)'}
+            color={response.type === 'system' ? 'blue.500' : 'gray.200'}
             fontSize="md"
             mb={2}
             fontFamily="'Share Tech Mono', monospace"
             fontWeight="500"
             letterSpacing="0.05em"
           >
-            <Text as="span" color="var(--text-secondary)" fontSize="xs">
+            <Text as="span" color="gray.400" fontSize="xs">
               [{response.timestamp}]
             </Text>
             {' '}{response.content}
           </Text>
         ))}
         {isTyping && (
-          <Text color="var(--neon-green)" fontSize="sm" className="typing-indicator">
+          <Text color="green.500" fontSize="sm" className="typing-indicator">
             ■
           </Text>
         )}
@@ -246,7 +246,7 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
       </Box>
 
       <Box className="command-suggestions" mb={4}>
-        <Text color="var(--neon-purple)" fontSize="sm" mb={2}>
+        <Text color="purple.500" fontSize="sm" mb={2}>
           Suggested Commands:
         </Text>
         <List spacing={1}>
@@ -254,9 +254,9 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
             <ListItem 
               key={index}
               fontSize="xs"
-              color="var(--text-secondary)"
+              color="gray.400"
               cursor="pointer"
-              _hover={{ color: 'var(--neon-blue)' }}
+              _hover={{ color: 'blue.500' }}
               onClick={() => setCommand(cmd.cmd)}
             >
               {index + 1}. {cmd.cmd} - {cmd.desc}
@@ -274,7 +274,7 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
             right={0}
             zIndex={10}
             bg="rgba(0, 0, 0, 0.9)"
-            border="1px solid var(--glass-border)"
+            border="1px solid gray.200"
             borderRadius="md"
             mb={2}
             maxH="200px"
@@ -286,13 +286,13 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
                   key={index}
                   p={2}
                   cursor="pointer"
-                  _hover={{ bg: 'rgba(0, 243, 255, 0.1)' }}
+            _hover={{ bg: 'blue.50' }}
                   onClick={() => handleAutoComplete(cmd.cmd)}
                 >
-                  <Text color="var(--neon-blue)" fontSize="sm">
+                  <Text color="blue.500" fontSize="sm">
                     {cmd.cmd}
                   </Text>
-                  <Text color="var(--text-secondary)" fontSize="xs">
+                  <Text color="gray.400" fontSize="xs">
                     {cmd.desc}
                   </Text>
                 </ListItem>
@@ -308,24 +308,24 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
             onChange={handleCommandChange}
             onKeyPress={handleKeyPress}
             bg="rgba(0, 0, 0, 0.3)"
-            border="1px solid var(--glass-border)"
-            _hover={{ borderColor: 'var(--neon-blue)' }}
+            border="1px solid gray.200"
+            _hover={{ borderColor: 'blue.500' }}
             _focus={{ 
-              borderColor: 'var(--neon-blue)',
-              boxShadow: '0 0 10px var(--neon-blue)'
+              borderColor: 'blue.500',
+              boxShadow: '0 0 10px rgba(0, 0, 255, 0.2)'
             }}
-            color="var(--text-primary)"
+            color="gray.100"
             className="command-input"
             autoFocus
           />
           <Button
             onClick={() => handleCommand()}
             bg="transparent"
-            border="1px solid var(--neon-blue)"
-            color="var(--neon-blue)"
+            border="1px solid blue.500"
+            color="blue.500"
             _hover={{
-              bg: 'rgba(0, 243, 255, 0.1)',
-              boxShadow: '0 0 15px var(--neon-blue)'
+              bg: 'blue.50',
+              boxShadow: '0 0 15px rgba(0, 0, 255, 0.2)'
             }}
             className="send-button"
           >
