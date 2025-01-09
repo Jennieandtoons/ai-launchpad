@@ -107,7 +107,10 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
   const [command, setCommand] = useState<string>('');
   const [responses, setResponses] = useState<CommandResponse[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [filteredCommands, setFilteredCommands] = useState<SuggestedCommand[]>([]);
+  const [showAutoComplete, setShowAutoComplete] = useState<boolean>(false);
   const responseEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Initial system messages
@@ -128,6 +131,9 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
         timestamp: getTimestamp()
       }
     ]);
+
+    // Auto-focus input on mount
+    inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -155,12 +161,37 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
     return [GENERIC_RESPONSES[Math.floor(Math.random() * GENERIC_RESPONSES.length)]];
   };
 
+  const handleCommandChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = e.target.value;
+    setCommand(value);
+
+    // Filter commands based on input
+    if (value.trim()) {
+      const filtered = SUGGESTED_COMMANDS.filter(cmd => 
+        cmd.cmd.toLowerCase().includes(value.toLowerCase()) ||
+        cmd.desc.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredCommands(filtered);
+      setShowAutoComplete(filtered.length > 0);
+    } else {
+      setFilteredCommands([]);
+      setShowAutoComplete(false);
+    }
+  };
+
+  const handleAutoComplete = (selectedCommand: string): void => {
+    setCommand(selectedCommand);
+    setShowAutoComplete(false);
+    inputRef.current?.focus();
+  };
+
   const handleCommand = async (): Promise<void> => {
     if (!command.trim()) return;
 
     const normalizedCommand = command.toUpperCase().trim();
     setCommand('');
     setIsTyping(true);
+    setShowAutoComplete(false);
 
     // Add user command to responses
     setResponses((prev: CommandResponse[]) => [...prev, {
@@ -191,11 +222,19 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
     }
 
     setIsTyping(false);
+    // Re-focus input after command execution
+    inputRef.current?.focus();
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      handleCommand();
+      e.preventDefault();
+      if (showAutoComplete && filteredCommands.length > 0) {
+        // If autocomplete is shown, select the first suggestion
+        handleAutoComplete(filteredCommands[0].cmd);
+      } else {
+        handleCommand();
+      }
     }
   };
 
@@ -247,36 +286,75 @@ const CommandInterface: React.FC<CommandInterfaceProps> = ({ agentName, onComman
         </List>
       </Box>
 
-      <HStack spacing={2}>
-        <Input
-          placeholder="Enter Command..."
-          value={command}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCommand(e.target.value)}
-          onKeyPress={handleKeyPress}
-          bg="rgba(0, 0, 0, 0.3)"
-          border="1px solid var(--glass-border)"
-          _hover={{ borderColor: 'var(--neon-blue)' }}
-          _focus={{ 
-            borderColor: 'var(--neon-blue)',
-            boxShadow: '0 0 10px var(--neon-blue)'
-          }}
-          color="var(--text-primary)"
-          className="command-input"
-        />
-        <Button
-          onClick={() => handleCommand()}
-          bg="transparent"
-          border="1px solid var(--neon-blue)"
-          color="var(--neon-blue)"
-          _hover={{
-            bg: 'rgba(0, 243, 255, 0.1)',
-            boxShadow: '0 0 15px var(--neon-blue)'
-          }}
-          className="send-button"
-        >
-          SEND
-        </Button>
-      </HStack>
+      <Box position="relative">
+        {showAutoComplete && (
+          <Box
+            position="absolute"
+            bottom="100%"
+            left={0}
+            right={0}
+            zIndex={10}
+            bg="rgba(0, 0, 0, 0.9)"
+            border="1px solid var(--glass-border)"
+            borderRadius="md"
+            mb={2}
+            maxH="200px"
+            overflowY="auto"
+          >
+            <List spacing={0}>
+              {filteredCommands.map((cmd, index) => (
+                <ListItem
+                  key={index}
+                  p={2}
+                  cursor="pointer"
+                  _hover={{ bg: 'rgba(0, 243, 255, 0.1)' }}
+                  onClick={() => handleAutoComplete(cmd.cmd)}
+                >
+                  <Text color="var(--neon-blue)" fontSize="sm">
+                    {cmd.cmd}
+                  </Text>
+                  <Text color="var(--text-secondary)" fontSize="xs">
+                    {cmd.desc}
+                  </Text>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        )}
+        <HStack spacing={2}>
+          <Input
+            ref={inputRef}
+            placeholder="Enter Command..."
+            value={command}
+            onChange={handleCommandChange}
+            onKeyPress={handleKeyPress}
+            bg="rgba(0, 0, 0, 0.3)"
+            border="1px solid var(--glass-border)"
+            _hover={{ borderColor: 'var(--neon-blue)' }}
+            _focus={{ 
+              borderColor: 'var(--neon-blue)',
+              boxShadow: '0 0 10px var(--neon-blue)'
+            }}
+            color="var(--text-primary)"
+            className="command-input"
+            autoFocus
+          />
+          <Button
+            onClick={() => handleCommand()}
+            bg="transparent"
+            border="1px solid var(--neon-blue)"
+            color="var(--neon-blue)"
+            _hover={{
+              bg: 'rgba(0, 243, 255, 0.1)',
+              boxShadow: '0 0 15px var(--neon-blue)'
+            }}
+            className="send-button"
+          >
+            SEND
+          </Button>
+        </HStack>
+        
+      </Box>
     </Box>
   );
 };
