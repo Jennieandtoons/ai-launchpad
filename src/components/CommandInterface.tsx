@@ -1,27 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Input, Button, Text, VStack, HStack, List, ListItem } from '@chakra-ui/react';
-
-type ResponseType = 'system' | 'response';
-
-interface CommandResponse {
-  type: ResponseType;
-  content: string;
-  timestamp: string;
-}
-
-interface CommandInterfaceProps {
-  agentName: string;
-  onCommandSuccess?: () => void;
-}
-
-interface SuggestedCommand {
-  cmd: string;
-  desc: string;
-}
-
-interface CommandResponseMap {
-  [key: string]: string[];
-}
+import { ResponseType, CommandResponse, CommandInterfaceProps, SuggestedCommand, CommandResponseMap } from '../types';
 
 const SUGGESTED_COMMANDS: SuggestedCommand[] = [
   { cmd: 'STATUS REPORT', desc: 'Get current status' },
