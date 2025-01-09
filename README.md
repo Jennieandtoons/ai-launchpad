@@ -1,24 +1,27 @@
 # Cyber Agent Hub
 
-A futuristic AI agent interface with a cyberpunk theme, built with React, TypeScript, and Chakra UI.
+A next-generation autonomous agent deployment platform powered by advanced AI, featuring a cyberpunk-themed interface built with React and TypeScript.
 
 ![Cyber Agent Hub](preview.png)
 
 ## Features
 
-- 🤖 Interactive AI Agent Cards
-- 💻 Terminal-style Chat Interface
-- 🎨 Cyberpunk Theme with Neon Effects
-- 📱 Fully Responsive Design
-- ⚡ Real-time Agent Status Updates
-- 🔄 Animated UI Elements
+- 🤖 Advanced AI Agent Interface
+- 💻 Terminal-style Command System
+- 🎨 Cyberpunk-inspired Design
+- 📱 Responsive Interface
+- ⚡ Real-time Status Updates
+- 🔄 Dynamic Command Processing
 
-## Available Agents
+## Core Agent: ZEKE AI
 
-- **NEXUS-7** (SENTINEL PRIME) - Combat-class autonomous agent
-- **GHOST-X** (PHANTOM OPS) - Stealth infiltration unit
-- **CIPHER-V** (MATRIX WEAVER) - Neural network architect
-- **OMEGA-AI** (MIND FORGE) - Quantum analysis unit
+ZEKE is a highly advanced autonomous agent with capabilities including:
+- Combat Systems Integration
+- Tactical Analysis
+- Neural Network Processing
+- Strategic Decision Making
+- Mission-critical Operations
+- Real-time Battlefield Assessment
 
 ## Tech Stack
 
@@ -27,14 +30,13 @@ A futuristic AI agent interface with a cyberpunk theme, built with React, TypeSc
 - Vite
 - Chakra UI
 - React Router
-- React Icons
 
 ## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone [your-repo-url]
-cd ai-launchpad
+git clone https://github.com/yourusername/cyber-agent-hub.git
+cd cyber-agent-hub
 ```
 
 2. Install dependencies:
@@ -52,48 +54,51 @@ npm run dev
 ## Project Structure
 
 ```
-ai-launchpad/
+cyber-agent-hub/
 ├── src/
-│   ├── components/     # Reusable components
-│   ├── pages/         # Page components
-│   ├── App.tsx        # Main application component
-│   ├── main.tsx       # Application entry point
-│   └── index.css      # Global styles
+│   ├── components/     # Core components
+│   ├── features/       # Feature modules
+│   ├── styles/         # Global styles
+│   └── types/         # TypeScript definitions
 ├── public/            # Static assets
 └── index.html         # HTML template
 ```
 
 ## Features in Detail
 
-### Agent Cards
-- Dynamic status indicators
-- Attribute progress bars
-- Interactive hover effects
-- Smooth animations
-
-### Chat Interface
-- Real-time message updates
-- Typing indicators
-- Message animations
-- Terminal-style design
-- Command history
-- Smart auto-complete suggestions
+### Command Interface
+- Real-time command processing
+- Intelligent auto-complete suggestions
+- Command history tracking
 - Auto-focus input field
 - Enhanced keyboard navigation
 - Command validation
+- Tactical response system
+- Status reporting
 
-### Visual Effects
-- Neon glow effects
-- Scanline animations
-- Hover transitions
-- Responsive grid layout
+### Visual Design
+- Neon accent effects
+- Cyberpunk aesthetics
+- Responsive layout
+- Dynamic animations
+- Status indicators
+- Command feedback visualization
+
+## Available Commands
+
+- `STATUS REPORT` - Get current system status
+- `TACTICAL BRIEF` - View mission information
+- `DIAGNOSTIC RUN` - System diagnostics
+- `ENGAGE SIMULATION` - Start combat simulation
+- `UPLOAD DATA` - Send mission parameters
+- `STANDBY MODE` - Enter standby state
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/enhancement`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature/enhancement`)
 5. Open a Pull Request
 
 ## License
