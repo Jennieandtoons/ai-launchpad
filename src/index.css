@@ -9,8 +9,6 @@
   --text-primary: #ffffff;
   --text-secondary: #b4b4ff;
   --grid-size: 40px;
-  --text-glow: 0 0 10px rgba(0, 243, 255, 0.7);
-  --text-glow-strong: 0 0 20px rgba(0, 243, 255, 0.9);
 }
 
 body {
@@ -22,7 +20,6 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
   font-size: 16px;
-  text-shadow: var(--text-glow);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -45,9 +42,6 @@ body::before {
 /* Enhanced Text Styles */
 .title-text {
   color: var(--text-primary) !important;
-  text-shadow: 0 0 20px var(--neon-blue),
-               0 0 30px var(--neon-blue),
-               0 0 40px var(--neon-blue) !important;
   font-weight: bold !important;
   letter-spacing: 0.15em !important;
   font-size: 2.5rem !important;
@@ -55,8 +49,6 @@ body::before {
 
 .subtitle-text {
   color: var(--text-secondary) !important;
-  text-shadow: 0 0 15px var(--neon-purple),
-               0 0 25px var(--neon-purple) !important;
   font-weight: 500 !important;
   letter-spacing: 0.2em !important;
   font-size: 1.2rem !important;
@@ -66,7 +58,6 @@ body::before {
   color: var(--text-primary) !important;
   font-size: 1.1rem !important;
   line-height: 1.8 !important;
-  text-shadow: 0 0 10px rgba(180, 180, 255, 0.7) !important;
   letter-spacing: 0.05em !important;
   opacity: 1 !important;
   background: rgba(10, 10, 31, 0.6);
@@ -83,7 +74,6 @@ body::before {
   height: 500px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
 }
 
 .chat-messages {
@@ -109,8 +99,6 @@ body::before {
   margin-left: auto;
   border: 2px solid var(--neon-blue);
   color: #ffffff;
-  text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
 }
 
 .agent-message {
@@ -118,8 +106,6 @@ body::before {
   margin-right: auto;
   border: 2px solid var(--neon-purple);
   color: #ffffff;
-  text-shadow: 0 0 10px rgba(188, 19, 254, 0.7);
-  box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);
 }
 
 .message-timestamp {
@@ -127,7 +113,6 @@ body::before {
   color: rgba(255, 255, 255, 0.8);
   margin-top: 8px;
   text-align: right;
-  text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
 }
 
 .message-input {
@@ -138,13 +123,10 @@ body::before {
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 1.1rem !important;
   letter-spacing: 0.05em !important;
-  text-shadow: 0 0 8px rgba(0, 243, 255, 0.5) !important;
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
 }
 
 .message-input::placeholder {
   color: rgba(180, 180, 255, 0.8) !important;
-  text-shadow: none !important;
 }
 
 .cyber-button {
@@ -156,24 +138,18 @@ body::before {
   letter-spacing: 0.2em !important;
   font-weight: 500 !important;
   padding: 12px 24px !important;
-  text-shadow: 0 0 10px var(--neon-blue) !important;
   transition: all 0.3s ease !important;
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.2) !important;
 }
 
 .cyber-button:hover {
   background: rgba(0, 243, 255, 0.25) !important;
-  box-shadow: 0 0 25px rgba(0, 243, 255, 0.4) !important;
   transform: translateY(-2px) !important;
-  text-shadow: 0 0 15px var(--neon-blue) !important;
 }
 
 /* Status Indicators */
 .status-text {
   color: var(--neon-blue) !important;
   font-weight: bold !important;
-  text-shadow: 0 0 15px var(--neon-blue),
-               0 0 25px var(--neon-blue) !important;
   letter-spacing: 0.2em !important;
   font-size: 1rem !important;
   background: rgba(0, 243, 255, 0.1);
@@ -188,12 +164,10 @@ body::before {
   overflow: hidden !important;
   background: rgba(255, 255, 255, 0.1) !important;
   border: 2px solid var(--neon-blue) !important;
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2) !important;
 }
 
 .attribute-progress > div {
   transition: width 1s ease-in-out !important;
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.4) !important;
 }
 
 /* Card Styles */
@@ -202,13 +176,11 @@ body::before {
   border: 2px solid var(--neon-blue) !important;
   border-radius: 8px !important;
   padding: 24px !important;
-  box-shadow: 0 0 25px rgba(0, 243, 255, 0.15) !important;
   transition: all 0.3s ease !important;
   backdrop-filter: blur(10px);
 }
 
 .cyber-card:hover {
-  box-shadow: 0 0 35px rgba(0, 243, 255, 0.25) !important;
   transform: translateY(-3px) !important;
   border-color: var(--neon-purple) !important;
 }
@@ -219,7 +191,6 @@ body::before {
   background: rgba(10, 10, 31, 0.98);
   border-radius: 12px;
   border: 2px solid var(--neon-blue);
-  box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
 }
 
 .profile-header {
@@ -231,7 +202,6 @@ body::before {
 .attribute-name {
   font-size: 1.1rem !important;
   color: var(--text-primary) !important;
-  text-shadow: 0 0 10px rgba(0, 243, 255, 0.5) !important;
   letter-spacing: 0.1em !important;
   font-weight: 500 !important;
 }
@@ -239,8 +209,6 @@ body::before {
 .attribute-value {
   font-size: 1.3rem !important;
   color: var(--neon-blue) !important;
-  text-shadow: 0 0 15px var(--neon-blue),
-               0 0 25px var(--neon-blue) !important;
   font-weight: bold !important;
 }
 
@@ -259,10 +227,8 @@ body::before {
   background: var(--neon-blue);
   border-radius: 5px;
   border: 2px solid var(--cyber-darker);
-  box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--neon-purple);
-  box-shadow: 0 0 15px rgba(188, 19, 254, 0.5);
 }
